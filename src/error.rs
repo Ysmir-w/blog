@@ -5,6 +5,7 @@ pub enum AppErrorType {
     NotFound,
     Db,
     Template,
+    Duplicate
 }
 #[derive(Debug)]
 pub struct AppError {
@@ -33,14 +34,21 @@ impl AppError {
     fn from_str(message: &str, types: AppErrorType) -> Self {
         Self::new(Some(message.to_string()), None, types)
     }
+
     pub fn notfound_opt(message: Option<String>) -> Self {
         Self::new(message, None, AppErrorType::NotFound)
     }
+    
     pub fn notfound_msg(message: &str) -> Self {
         Self::notfound_opt(Some(message.to_string()))
     }
+
     pub fn notfound() -> Self {
         Self::notfound_msg("没有找到符合条件的数据")
+    }
+
+    pub fn duplicate(message: &str)->Self{
+        Self::from_str(message, AppErrorType::Duplicate)
     }
 }
 

@@ -1,4 +1,5 @@
 pub mod paginate;
+pub mod category;
 
 use self::paginate::Paginate;
 
@@ -143,4 +144,16 @@ where
     let total_records = count(client, count_sql, params).await?;
 
     Ok(Paginate::new(page, DEFAULT_PAGE_SIZE, total_records, data))
+}
+
+
+/// 删除或恢复记录
+async fn del_or_restore(
+    client: &impl GenericClient,
+    table:&str,
+    id:&(dyn ToSql+Sync),
+    is_del:bool
+)->Result<u64>{
+    let sql = format!("update {} set is_del = $1 where id = $2",table);
+    execute(client, &sql, &[&is_del,id]).await
 }
