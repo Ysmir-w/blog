@@ -7,8 +7,11 @@ use axum::{
 use deadpool_postgres::Client;
 use serde::Deserialize;
 
+use self::index::index;
+
 pub mod category;
 pub mod index;
+pub mod topic;
 
 type RedirectView = (StatusCode, HeaderMap, ());
 
@@ -19,9 +22,15 @@ pub fn router() -> Router {
         .route("/del/:id", get(category::del))
         .route("/edit/:id", get(category::edit_ui).post(category::edit));
 
+    let topic_router = Router::new()
+        .route("/", get(topic::index))
+        .route("/add", get(topic::add_ui).post(topic::add))
+        .route("/edit/:id", get(topic::edit_ui).post(topic::edit))
+        .route("/del/:id", get(topic::del));
     Router::new()
-        .route("/", get(index::index))
+        .route("/", get(index))
         .nest("/category", category_router)
+        .nest("/topic", topic_router)
 }
 
 fn redirect(url: &str) -> Result<RedirectView> {

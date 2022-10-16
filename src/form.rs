@@ -12,3 +12,13 @@ pub struct EditCategory {
     pub id: i32,
     pub name: String,
 }
+
+#[derive(Deserialize)]
+pub struct CreateTopic{
+    pub title:String,
+    pub category_id:i32,
+    pub summary:String,
+    pub markdown:String
+}
+
+pub type EditTopic = CreateTopic;

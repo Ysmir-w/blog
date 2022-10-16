@@ -1,5 +1,6 @@
 pub mod paginate;
 pub mod category;
+pub mod topic;
 
 use self::paginate::Paginate;
 
